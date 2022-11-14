@@ -1,13 +1,11 @@
-name: CI/CD Pipeline
+name: Paperturn Website
 on:
   push:
     branches: [ main ]
 
-
 env:
   DEPLOYMENT_ROLE: arn:aws:iam::619075404012:role/GitHubDeployRole
-  APPLICATION_NAME: ""
-
+  APPLICATION_NAME: PaperturnWebApplication
 
 jobs:
   continuous-integration:
@@ -38,7 +36,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          role-to-assume: arn:aws:iam::619075404012:role/GitHubDeployRole
+          role-to-assume: $DEPLOYMENT_ROLE
           role-session-name: GithubActions
           aws-region: eu-west-1
 
@@ -48,5 +46,4 @@ jobs:
       - name: Create CodeDeploy Deployment
         id: deploy
         run: |
-          aws deploy create-deployment \
-            --application-name application-name
+          aws deploy create-deployment --application-name $APPLICATION_NAME

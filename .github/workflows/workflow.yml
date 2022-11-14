@@ -6,7 +6,7 @@ on:
 env:
   DEPLOYMENT_ROLE: arn:aws:iam::619075404012:role/GitHubDeployRole
   APPLICATION_NAME: ""
-  
+
 
 jobs:
   continuous-integration:
@@ -17,7 +17,7 @@ jobs:
       - name: Setup PHP with composer v2
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.1'
+          php-version: '7.2'
           tools: composer:v2
             
       - name: Print PHP version

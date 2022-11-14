@@ -6,27 +6,12 @@ on:
 env:
   DEPLOYMENT_ROLE: arn:aws:iam::619075404012:role/GitHubDeployRole
   APPLICATION_NAME: PaperturnWebApplication
-
-permissions:
-  actions: write
-  contents: read
-  id-token: write 
+  DEPLOYMENT_GROUP: PaperturnWebDeploymentGroup
 
 jobs:
   continuous-integration:
     runs-on: ubuntu-latest
     steps:
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          role-to-assume: arn:aws:iam::619075404012:role/GitHubDeployRole
-          role-session-name: GithubActions
-          aws-region: eu-west-1
-
-      - name: Test creds
-        run: aws sts get-caller-identity
-
       - uses: actions/checkout@v3
 
       - name: Setup PHP with composer v2
@@ -44,7 +29,10 @@ jobs:
   continuous-deployment:
     runs-on: ubuntu-latest
     needs: [continuous-integration]
-
+    permissions:
+      actions: write
+      contents: read
+      id-token: write 
     steps:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -59,4 +47,6 @@ jobs:
       - name: Create CodeDeploy Deployment
         id: deploy
         run: |
-          aws deploy create-deployment --application-name $APPLICATION_NAME
+          aws deploy create-deployment \
+            --application-name $APPLICATION_NAME \
+            --deployment-group-name $DEPLOYMENT_GROUP

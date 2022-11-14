@@ -58,9 +58,9 @@ pre {
   ?>
     <pre>        
     Page:      index.php
-    instance:  <?php echo $instance_id ?>
-    az:        <?php echo $az ?>
-    Uptime:    <?php echo $uptime ?>
+    instance:  <?php echo $instance_id ?> 
+    az:        <?php echo $az ?> 
+    Uptime:    <?php echo $uptime ?> 
     Load time: 123
 
     Time: 1337ms

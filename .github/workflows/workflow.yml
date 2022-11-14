@@ -7,6 +7,7 @@ env:
   DEPLOYMENT_ROLE: arn:aws:iam::619075404012:role/GitHubDeployRole
   APPLICATION_NAME: PaperturnWebApplication
   DEPLOYMENT_GROUP: PaperturnWebDeploymentGroup
+  ARTIFACT_BUCKET: dev-paperturninfrawebsit-codedeploycodedeploydepl-131acrtr827ji
 
 jobs:
   continuous-integration:
@@ -29,6 +30,13 @@ jobs:
   continuous-deployment:
     runs-on: ubuntu-latest
     needs: [continuous-integration]
+    strategy:
+      matrix:
+        appname: ['PaperturnWebApplication']
+        deploy-group: ['PaperturnWebDeploymentGroup']
+        s3-bucket: ['dev-paperturninfrawebsit-codedeploycodedeploydepl-131acrtr827ji']
+        s3-filename: ['staging-aws-codedeploy-${{ github.sha }}']
+
     permissions:
       actions: write
       contents: read
@@ -41,12 +49,22 @@ jobs:
           role-session-name: GithubActions
           aws-region: eu-west-1
 
-      - name: Test creds
-        run: aws sts get-caller-identity
+      # Deploy push to AWS S3
+      - name: AWS Deploy push
+        run: |
+          aws deploy push \
+          --application-name ${{ matrix.appname }} \
+          --description "This is a revision for the ${{ matrix.appname }}-${{ github.sha }}" \
+          --ignore-hidden-files \
+          --s3-location s3://${{ matrix.s3-bucket }}/${{ matrix.s3-filename }}.zip \
+          --source .
 
-      - name: Create CodeDeploy Deployment
-        id: deploy
+      # Create deployment to CodeDeploy
+      - name: AWS Create Deployment
         run: |
           aws deploy create-deployment \
-            --application-name $APPLICATION_NAME \
-            --deployment-group-name $DEPLOYMENT_GROUP
+           --application-name ${{ matrix.appname }} \
+           --deployment-config-name CodeDeployDefault.OneAtATime \
+           --deployment-group-name ${{ matrix.deploy-group }} \
+           --file-exists-behavior OVERWRITE \
+           --s3-location bucket=${{ matrix.s3-bucket }},key=${{ matrix.s3-filename }}.zip,bundleType=zip \

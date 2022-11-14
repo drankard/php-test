@@ -42,6 +42,7 @@ pre {
 	</style>
 </head>
 <body>
+	<?php echo 'While this is going to be parsed.'; ?>
     <pre>        
     Version:   webpack 3.11.0        
     instance:  i-cssc
@@ -53,28 +54,3 @@ pre {
     </pre>
 </body>
 </html>
-
-
-
-
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Principal": {
-                "Federated": "arn:aws:iam::619075404012:oidc-provider/token.actions.githubusercontent.com"
-            },
-            "Action": "sts:AssumeRoleWithWebIdentity",
-            "Condition": {
-                "StringLike": {
-                    "token.actions.githubusercontent.com:sub": "repo:drankard/php-test:*"
-                },
-                "ForAllValues:StringEquals": {
-                    "token.actions.githubusercontent.com:iss": "https://token.actions.githubusercontent.com",
-                    "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
-                }
-            }
-        }
-    ]
-}

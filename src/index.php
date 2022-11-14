@@ -43,11 +43,12 @@ pre {
 </head>
 <body>
     <pre>        
-    Version: webpack 3.11.0        
-    instance: 'i-cssc'
-    region: "eu-west-1"
-    Uptime: "sas"
-    Load time:
+    Version:   webpack 3.11.0        
+    instance:  i-cssc
+    region:    eu-west-1
+    Uptime:    sas
+    Load time: 123
+
     Time: 1337ms
     </pre>
 </body>

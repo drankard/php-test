@@ -3,6 +3,7 @@ on:
   push:
     branches: [ main ]
 
+
 env:
   DEPLOYMENT_ROLE: arn:aws:iam::619075404012:role/GitHubDeployRole
   APPLICATION_NAME: ""
@@ -29,11 +30,14 @@ jobs:
   continuous-deployment:
     runs-on: ubuntu-latest
     needs: [continuous-integration]
+    permissions:
+      contents: read
+      id-token: write    
     steps:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          role-to-assume: arn:aws:iam::619075404012:role/GitHubDeployRole
+          role-to-assume: $DEPLOYMENT_ROLE
           aws-region: eu-west-1
 
       - name: Test creds

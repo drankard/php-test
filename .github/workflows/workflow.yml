@@ -49,6 +49,12 @@ jobs:
           role-session-name: GithubActions
           aws-region: eu-west-1
 
+
+      # Deploy push to AWS S3
+      - name: List files
+        run: |
+          ls -ltra
+
       # Deploy push to AWS S3
       - name: AWS Deploy push
         run: |

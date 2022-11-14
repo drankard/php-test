@@ -22,17 +22,6 @@ jobs:
           tools: composer:v2
       
 
-     - name: List files
-        run: |
-          composer
-              --no-ansi \
-              --no-interaction \
-              --optimize-autoloader \
-              --no-progress \
-              --no-dev \
-              --profile \
-              install
-              
       - name: Install dependencies
         run: composer install --prefer-dist
 

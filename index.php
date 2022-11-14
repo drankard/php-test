@@ -42,7 +42,10 @@ pre {
 	</style>
 </head>
 <body>
-	<?php echo 'While this is going to be parsed.'; ?>
+	<?php 
+    echo 'While this is going to be parsed.';
+    require 'vendor/autoload.php';
+  ?>
     <pre>        
     Version:   webpack 3.11.0        
     instance:  i-cssc

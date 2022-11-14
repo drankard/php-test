@@ -33,7 +33,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          role-to-assume: $DEPLOYMENT_ROLE
+          role-to-assume: arn:aws:iam::619075404012:role/GitHubDeployRole
           aws-region: eu-west-1
 
       - name: Test creds

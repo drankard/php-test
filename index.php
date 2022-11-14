@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <head>
-	<title>instance-id</title>
+
+  <?php
+      require 'vendor/autoload.php';
+      $instance_id = @file_get_contents("http://instance-data/latest/meta-data/instance-id");
+      $az = @file_get_contents("http://instance-data/latest/meta-data/placement/availability-zone");
+      $uptime = exec('uptime -s')    
+  ?>
+
+	<title>
+    <?php echo $instance_id ?>
+  </title>
 	<style>
 body {
   background-color: black;
@@ -47,10 +57,10 @@ pre {
     require 'vendor/autoload.php';
   ?>
     <pre>        
-    Version:   webpack 3.11.0        
-    instance:  i-cssc
-    region:    eu-west-1
-    Uptime:    sas
+    Page:      index.php
+    instance:  <?php echo $instance_id ?>
+    az:        <?php echo $az ?>
+    Uptime:    <?php echo $uptime ?>
     Load time: 123
 
     Time: 1337ms

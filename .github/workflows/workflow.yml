@@ -20,7 +20,11 @@ jobs:
         with:
           php-version: '7.2'
           tools: composer:v2
-            
+      
+      - name: List files
+        run: |
+          ls -ltra
+
       - name: Print PHP version
         run: echo ${{ steps.setup-php.outputs.php-version }}      
 

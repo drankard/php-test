@@ -3,15 +3,17 @@ on:
   push:
     branches: [ main ]
 
-env:
-  DEPLOYMENT_ROLE: arn:aws:iam::619075404012:role/GitHubDeployRole
-  APPLICATION_NAME: PaperturnWebApplication
-  DEPLOYMENT_GROUP: PaperturnWebDeploymentGroup
-  ARTIFACT_BUCKET: dev-paperturninfrawebsit-codedeploycodedeploydepl-131acrtr827ji
 
 jobs:
   continuous-integration:
     runs-on: ubuntu-latest
+    environment: DEV
+    env:
+      DEPLOYMENT_ROLE: arn:aws:iam::619075404012:role/GitHubDeployRole
+      APPLICATION_NAME: PaperturnWebApplication
+      DEPLOYMENT_GROUP: PaperturnWebDeploymentGroup
+      ARTIFACT_BUCKET: dev-paperturninfrawebsit-codedeploycodedeploydepl-131acrtr827ji    
+
     steps:
       - uses: actions/checkout@v3
 

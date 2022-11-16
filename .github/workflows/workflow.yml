@@ -8,12 +8,6 @@ jobs:
   continuous-integration:
     runs-on: ubuntu-latest
     environment: DEV
-    env:
-      DEPLOYMENT_ROLE: arn:aws:iam::619075404012:role/GitHubDeployRole
-      APPLICATION_NAME: PaperturnWebApplication
-      DEPLOYMENT_GROUP: PaperturnWebDeploymentGroup
-      ARTIFACT_BUCKET: dev-paperturninfrawebsit-codedeploycodedeploydepl-131acrtr827ji    
-
     steps:
       - uses: actions/checkout@v3
 
@@ -44,12 +38,12 @@ jobs:
   continuous-deployment:
     runs-on: ubuntu-latest
     needs: [continuous-integration]
-    strategy:
-      matrix:
-        appname: ['PaperturnWebApplication']
-        deploy-group: ['PaperturnWebDeploymentGroup']
-        s3-bucket: ['dev-paperturninfrawebsit-codedeploycodedeploydepl-131acrtr827ji']
-        s3-filename: ['staging-aws-codedeploy-${{ github.sha }}']
+    env:
+      DEPLOYMENT_ROLE: arn:aws:iam::619075404012:role/GitHubDeployRole
+      APP_NAME: PaperturnWebApplication
+      DEPLOYMENT_GROUP: PaperturnWebDeploymentGroup
+      ARTIFACT_BUCKET: dev-paperturninfrawebsit-codedeploycodedeploydepl-131acrtr827ji
+      ARTIFACT_KEY: 'staging-aws-codedeploy-${{ github.sha }}'
 
     permissions:
       actions: write
@@ -84,18 +78,18 @@ jobs:
       - name: AWS Deploy push
         run: |
           aws deploy push \
-          --application-name ${{ matrix.appname }} \
-          --description "This is a revision for the ${{ matrix.appname }}-${{ github.sha }}" \
+          --application-name $APP_NAME \
+          --description "This is a revision for the $APP_NAME-${{ github.sha }}" \
           --ignore-hidden-files \
-          --s3-location s3://${{ matrix.s3-bucket }}/${{ matrix.s3-filename }}.zip \
+          --s3-location s3://$ARTIFACT_BUCKET/$ARTIFACT_KEY.zip \
           --source .
 
       # Create deployment to CodeDeploy
       - name: AWS Create Deployment
         run: |
           aws deploy create-deployment \
-           --application-name ${{ matrix.appname }} \
+           --application-name $APP_NAME \
            --deployment-config-name CodeDeployDefault.OneAtATime \
-           --deployment-group-name ${{ matrix.deploy-group }} \
+           --deployment-group-name $DEPLOYMENT_GROUP \
            --file-exists-behavior OVERWRITE \
-           --s3-location bucket=${{ matrix.s3-bucket }},key=${{ matrix.s3-filename }}.zip,bundleType=zip \
+           --s3-location bucket=$ARTIFACT_BUCKET,key=$ARTIFACT_KEY.zip,bundleType=zip \

@@ -75,7 +75,7 @@ jobs:
           ls -ltra
 
       # Deploy push to AWS S3
-      - name: AWS Posh to S3
+      - name: AWS Push to S3
         run: |
           aws deploy push \
           --application-name $APP_NAME \

@@ -6,8 +6,7 @@ on:
 
 jobs:
   continuous-integration:
-    runs-on: ubuntu-latest
-    environment: DEV
+    runs-on: ubuntu-latest    
     steps:
       - uses: actions/checkout@v3
 
@@ -38,6 +37,7 @@ jobs:
   continuous-deployment:
     runs-on: ubuntu-latest
     needs: [continuous-integration]
+    environment: DEV
     env:
       DEPLOYMENT_ROLE: arn:aws:iam::619075404012:role/GitHubDeployRole
       APP_NAME: PaperturnWebApplication
@@ -75,7 +75,7 @@ jobs:
           ls -ltra
 
       # Deploy push to AWS S3
-      - name: AWS Deploy push
+      - name: AWS Posh to S3
         run: |
           aws deploy push \
           --application-name $APP_NAME \
